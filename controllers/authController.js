@@ -28,6 +28,11 @@ const register = async (req, res) => {
     return res.status(400).json({ message: "Name, email, and password are required." });
   }
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: "Invalid email format." });
+  }
+
   const existingUser = await User.findOne({ email });
   if (existingUser) {
     return res.status(409).json({ message: "Email already in use." });
@@ -53,6 +58,11 @@ const login = async (req, res) => {
 
   if (!email || !password) {
     return res.status(400).json({ message: "Email and password are required." });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: "Invalid email format." });
   }
 
   const user = await User.findOne({ email });
